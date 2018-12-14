@@ -9,6 +9,15 @@ spring:
       username: admin
       password: admin
       database: admin
+    elasticsearch:
+      cluster-name: docker-cluster
+      cluster-nodes: localhost:9300
+
+logging:
+  level:
+    org:
+      springframework: DEBUG
+
 
 security:
   oauth2:
@@ -16,3 +25,10 @@ security:
       id: product-rest-api
       jwt:
         key-value: secretKey
+
+#axon:
+#  eventhandling:
+#    processors:
+#      queryModel:
+#        mode: tracking
+#        source: eventBus

@@ -18,11 +18,14 @@
     <properties>
         <java.version>1.8</java.version>
         <spring-cloud.version>Greenwich.M3</spring-cloud.version>
+        <axon.version>4.0</axon.version>
+        <spek.version></spek.version>
     </properties>
 
     <modules>
         <module>product-api</module>
         <module>product-domain</module>
+        <module>product-query</module>
         <module>product-web</module>
     </modules>
 
@@ -34,6 +37,16 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.axonframework</groupId>
+                <artifactId>axon-spring-boot-starter</artifactId>
+                <version>${axon.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.axonframework</groupId>
+                <artifactId>axon-mongo</artifactId>
+                <version>${axon.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
