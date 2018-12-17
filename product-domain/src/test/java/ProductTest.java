@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertSame;
 
-
 public class ProductTest {
 
     private AggregateTestFixture<Product> fixture;
@@ -36,11 +35,11 @@ public class ProductTest {
                 .expectSuccessfulHandlerExecution()
                 .expectEvents(new ProductPreparationStartedEvent("123", "product_def", "receiver", "executor"))
                 .expectState(product -> {
-                    assertSame(product.productDefId, "product_def");
-                    assertSame(product.receiverName, "receiver");
-                    assertSame(product.executorName, "executor");
+                    assertSame("product_def", product.productDefId);
+                    assertSame("receiver", product.receiverName);
+                    assertSame("executor", product.executorName);
 
-                    assertSame(product.state, ProductState.IN_PREPARATION);
+                    assertSame(ProductState.IN_PREPARATION, product.state);
                 });
     }
 
@@ -54,11 +53,11 @@ public class ProductTest {
                 .expectSuccessfulHandlerExecution()
                 .expectEvents(new ProductPreparationEndedEvent("123"))
                 .expectState(product -> {
-                    assertSame(product.productDefId, "product_def");
-                    assertSame(product.receiverName, "receiver");
-                    assertSame(product.executorName, "executor");
+                    assertSame("product_def", product.productDefId);
+                    assertSame("receiver", product.receiverName);
+                    assertSame("executor", product.executorName);
 
-                    assertSame(product.state, ProductState.PREPARED);
+                    assertSame(ProductState.PREPARED, product.state);
                 });
     }
 
@@ -83,7 +82,7 @@ public class ProductTest {
                 .when(new CancelProductPreparationCommand("123"))
                 .expectSuccessfulHandlerExecution()
                 .expectEvents(new ProductPreparationCancelledEvent("123"))
-                .expectState(product -> assertSame(product.state, ProductState.CANCELLED));
+                .expectState(product -> assertSame(ProductState.CANCELLED, product.state));
     }
 
     @Test
@@ -119,7 +118,7 @@ public class ProductTest {
                 .when(new ChangeProductReceiverCommand("123", "new_receiver"))
                 .expectSuccessfulHandlerExecution()
                 .expectEvents(new ProductReceiverChangedEvent("123", "new_receiver"))
-                .expectState(product -> assertSame(product.receiverName, "new_receiver"));
+                .expectState(product -> assertSame("new_receiver", product.receiverName));
     }
 
     @Test
@@ -131,7 +130,7 @@ public class ProductTest {
                 .when(new ChangeProductReceiverCommand("123", "new_receiver"))
                 .expectSuccessfulHandlerExecution()
                 .expectEvents(new ProductReceiverChangedEvent("123", "new_receiver"))
-                .expectState(product -> assertSame(product.receiverName, "new_receiver"));
+                .expectState(product -> assertSame("new_receiver", product.receiverName));
     }
 
     @Test
@@ -156,7 +155,6 @@ public class ProductTest {
                 .expectNoEvents()
                 .expectException(IllegalStateException.class);
     }
-
 
     private void withUser(String userName) {
         Authentication authenticatedUser = new UsernamePasswordAuthenticationToken(
