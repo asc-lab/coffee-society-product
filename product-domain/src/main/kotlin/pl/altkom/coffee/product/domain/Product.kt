@@ -5,13 +5,11 @@ import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.modelling.command.AggregateIdentifier
 import org.axonframework.modelling.command.AggregateLifecycle
 import org.axonframework.spring.stereotype.Aggregate
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.User
+import pl.altkom.coffee.product.api.enums.ProductState
 import pl.altkom.coffee.product.api.ProductPreparationCancelledEvent
 import pl.altkom.coffee.product.api.ProductPreparationEndedEvent
 import pl.altkom.coffee.product.api.ProductPreparationStartedEvent
 import pl.altkom.coffee.product.api.ProductReceiverChangedEvent
-import pl.altkom.coffee.product.api.enums.ProductState
 
 @Aggregate
 class Product {
@@ -26,11 +24,9 @@ class Product {
 
     @CommandHandler
     constructor(command: BeginProductPreparationCommand) {
-        val executingUser = SecurityContextHolder.getContext().authentication.principal as User
-
         AggregateLifecycle.apply(
                 ProductPreparationStartedEvent(command.id, command.productDefId,
-                        command.productReceiverName, executingUser.username))
+                        command.productReceiverName, command.executor))
     }
 
     @EventSourcingHandler
@@ -81,12 +77,10 @@ class Product {
 
     @CommandHandler
     fun handle(command: ChangeProductReceiverCommand) {
-        val executingUser = SecurityContextHolder.getContext().authentication.principal as User
-
         if (isCancelled()) {
             throw IllegalStateException(CANCELLED_ERROR_MESSAGE)
         }
-        if (!canChangeReceiver(executingUser.username)) {
+        if (!canChangeReceiver(command.executor)) {
             throw IllegalStateException(WRONG_USER_ERROR_MESSAGE)
         }
 

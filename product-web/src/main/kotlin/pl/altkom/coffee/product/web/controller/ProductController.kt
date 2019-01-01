@@ -2,6 +2,7 @@ package pl.altkom.coffee.product.web.controller
 
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -23,8 +24,10 @@ class ProductController(private val commandGateway: CommandGateway) {
     @PreAuthorize("hasAuthority('BARISTA')")
     @PostMapping("/begin")
     fun beginProductPreparation(@RequestBody request: BeginProductPreparationRequest): Mono<Void> {
+        val executingUser = SecurityContextHolder.getContext().authentication.principal as String
+
         return Mono.fromFuture(commandGateway.send<Void>(
-                BeginProductPreparationCommand(request.id, request.productDefId, request.productReceiverName)))
+                BeginProductPreparationCommand(request.id, request.productDefId, request.productReceiverName, executingUser)))
     }
 
     @PreAuthorize("hasAuthority('BARISTA')")
@@ -44,7 +47,9 @@ class ProductController(private val commandGateway: CommandGateway) {
     @PreAuthorize("hasAnyAuthority('MEMBER','BARISTA')")
     @PostMapping("/changeReceiver")
     fun changeReciver(@RequestBody request: ChangeProductReceiverRequest): Mono<Void> {
+        val executingUser = SecurityContextHolder.getContext().authentication.principal as String
+
         return Mono.fromFuture(commandGateway.send<Void>(
-                ChangeProductReceiverCommand(request.id, request.productReceiverNewName)))
+                ChangeProductReceiverCommand(request.id, request.productReceiverNewName, executingUser)))
     }
 }
