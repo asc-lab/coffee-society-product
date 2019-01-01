@@ -25,12 +25,6 @@
         </dependency>
 
         <dependency>
-            <groupId>pl.altkom.coffee.productcatalog</groupId>
-            <artifactId>productcatalog-api</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
