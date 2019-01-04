@@ -1,5 +1,6 @@
 # CoffeeSociety Product Service
 [![Build Status](https://travis-ci.org/asc-lab/coffee-society-product.svg?branch=master)](https://travis-ci.org/asc-lab/coffee-society-product)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=pl.altkom.coffee.product%3Aproduct-parent&metric=alert_status)](https://sonarcloud.io/dashboard?id=pl.altkom.coffee.product%3Aproduct-parent)
 
 ## Building
 
