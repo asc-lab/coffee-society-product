@@ -1,6 +1,6 @@
 package pl.altkom.coffee.product.api.dto
 
-data class BeginProductPreparationRequest(
+data class RegisterProductPreparationRequest(
         val id: String, val productDefId: String, val productReceiverName: String, val productName: String)
 
 data class EndProductPreparationRequest(

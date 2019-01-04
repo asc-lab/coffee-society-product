@@ -5,11 +5,10 @@ import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.modelling.command.AggregateIdentifier
 import org.axonframework.modelling.command.AggregateLifecycle
 import org.axonframework.spring.stereotype.Aggregate
-import pl.altkom.coffee.product.api.enums.ProductState
 import pl.altkom.coffee.product.api.ProductPreparationCancelledEvent
-import pl.altkom.coffee.product.api.ProductPreparationEndedEvent
-import pl.altkom.coffee.product.api.ProductPreparationStartedEvent
+import pl.altkom.coffee.product.api.ProductPreparationRegisteredEvent
 import pl.altkom.coffee.product.api.ProductReceiverChangedEvent
+import pl.altkom.coffee.product.api.enums.ProductState
 
 @Aggregate
 class Product {
@@ -23,45 +22,23 @@ class Product {
     constructor()
 
     @CommandHandler
-    constructor(command: BeginProductPreparationCommand) {
+    constructor(command: RegisterProductPreparationCommand) {
         AggregateLifecycle.apply(
-                ProductPreparationStartedEvent(command.id, command.productDefId,
+                ProductPreparationRegisteredEvent(command.id, command.productDefId,
                         command.productReceiverName, command.executor))
     }
 
     @EventSourcingHandler
-    fun on(event: ProductPreparationStartedEvent) {
+    fun on(event: ProductPreparationRegisteredEvent) {
         this.id = event.id
         this.productDefId = event.productDefId
         this.receiverName = event.productReceiverName
         this.executorName = event.productExecutorName
-        this.state = ProductState.IN_PREPARATION
-    }
-
-    @CommandHandler
-    fun handle(command: EndProductPreparationCommand) {
-        if (!isInPreparation()) {
-            throw IllegalStateException(PREPARED_ERROR_MESSAGE)
-        }
-
-        if (isCancelled()) {
-            throw IllegalStateException(CANCELLED_ERROR_MESSAGE)
-        }
-
-        AggregateLifecycle.apply(ProductPreparationEndedEvent(id))
-    }
-
-    @EventSourcingHandler
-    fun on(event: ProductPreparationEndedEvent) {
         this.state = ProductState.PREPARED
     }
 
     @CommandHandler
     fun handle(command: CancelProductPreparationCommand) {
-        if (!isInPreparation()) {
-            throw IllegalStateException(PREPARED_ERROR_MESSAGE)
-        }
-
         if (isCancelled()) {
             throw IllegalStateException(CANCELLED_ERROR_MESSAGE)
         }

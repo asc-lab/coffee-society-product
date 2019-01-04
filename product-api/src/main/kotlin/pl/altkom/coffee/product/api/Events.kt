@@ -1,9 +1,7 @@
 package pl.altkom.coffee.product.api
 
-data class ProductPreparationStartedEvent(
+data class ProductPreparationRegisteredEvent(
         val id: String, val productDefId: String, val productReceiverName: String, val productExecutorName: String)
-
-data class ProductPreparationEndedEvent(val id: String)
 
 data class ProductPreparationCancelledEvent(val id: String)
 
