@@ -69,10 +69,6 @@ class Product {
         this.receiverName = event.newProductReceiverName
     }
 
-    private fun isInPreparation(): Boolean {
-        return this.state == ProductState.IN_PREPARATION
-    }
-
     private fun isCancelled(): Boolean {
         return this.state == ProductState.CANCELLED
     }
