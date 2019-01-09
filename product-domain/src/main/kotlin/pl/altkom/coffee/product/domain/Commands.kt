@@ -5,8 +5,8 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier
 data class RegisterProductPreparationCommand(
         @TargetAggregateIdentifier val id: String,
         val productDefId: String,
-        val productReceiverName: String,
-        val executor: String
+        val productReceiverId: String,
+        val productExecutorId: String
 )
 
 data class CancelProductPreparationCommand(
@@ -14,6 +14,6 @@ data class CancelProductPreparationCommand(
 
 data class ChangeProductReceiverCommand(
         @TargetAggregateIdentifier val id: String,
-        val newProductReceiverName: String,
+        val newProductReceiverId: String,
         val executor: String
 )
