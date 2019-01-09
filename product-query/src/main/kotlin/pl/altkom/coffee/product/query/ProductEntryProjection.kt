@@ -19,13 +19,13 @@ class ProductEntryProjection(private val repository: ProductEntryRepository, pri
         val name = queryGateway.query(
                 ProductNameQuery(event.productDefId), InstanceResponseType(String::class.java)).get()
 
-        repository.save(ProductEntry(name, event.productReceiverName))
+        repository.save(ProductEntry(name, event.productReceiverId))
     }
 
     @EventHandler
     fun on(event: ProductReceiverChangedEvent) {
         repository.findById(event.id).ifPresent { productEntry ->
-            productEntry.memberName = event.newProductReceiverName
+            productEntry.memberName = event.newProductReceiverId
             repository.save(productEntry)
         }
     }

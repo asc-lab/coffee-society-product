@@ -13,10 +13,10 @@ import pl.altkom.coffee.product.api.enums.ProductState
 @Aggregate
 class Product {
     @AggregateIdentifier
-    lateinit var id: String
+    lateinit var productId: String
     lateinit var productDefId: String
-    lateinit var executorName: String
-    lateinit var receiverName: String
+    lateinit var executorId: String
+    lateinit var receiverId: String
     lateinit var state: ProductState
 
     constructor()
@@ -25,15 +25,15 @@ class Product {
     constructor(command: RegisterProductPreparationCommand) {
         AggregateLifecycle.apply(
                 ProductPreparationRegisteredEvent(command.id, command.productDefId,
-                        command.productReceiverName, command.executor))
+                        command.productReceiverId, command.productExecutorId))
     }
 
     @EventSourcingHandler
     fun on(event: ProductPreparationRegisteredEvent) {
-        this.id = event.id
+        this.productId = event.id
         this.productDefId = event.productDefId
-        this.receiverName = event.productReceiverName
-        this.executorName = event.productExecutorName
+        this.receiverId = event.productReceiverId
+        this.executorId = event.productExecutorId
         this.state = ProductState.PREPARED
     }
 
@@ -43,12 +43,12 @@ class Product {
             throw IllegalStateException(CANCELLED_ERROR_MESSAGE)
         }
 
-        AggregateLifecycle.apply(ProductPreparationCancelledEvent(id))
+        AggregateLifecycle.apply(ProductPreparationCancelledEvent(productId))
     }
 
     @EventSourcingHandler
     fun on(event: ProductPreparationCancelledEvent) {
-        this.id = event.id
+        this.productId = event.id
         this.state = ProductState.CANCELLED
     }
 
@@ -61,29 +61,24 @@ class Product {
             throw IllegalStateException(WRONG_USER_ERROR_MESSAGE)
         }
 
-        AggregateLifecycle.apply(ProductReceiverChangedEvent(id, command.newProductReceiverName))
+        AggregateLifecycle.apply(ProductReceiverChangedEvent(productId, command.newProductReceiverId))
     }
 
     @EventSourcingHandler
     fun on(event: ProductReceiverChangedEvent) {
-        this.receiverName = event.newProductReceiverName
-    }
-
-    private fun isInPreparation(): Boolean {
-        return this.state == ProductState.IN_PREPARATION
+        this.receiverId = event.newProductReceiverId
     }
 
     private fun isCancelled(): Boolean {
         return this.state == ProductState.CANCELLED
     }
 
-    private fun canChangeReceiver(username: String): Boolean {
-        return this.receiverName == username || this.executorName == username
+    private fun canChangeReceiver(memberId: String): Boolean {
+        return this.receiverId == memberId || this.executorId == memberId
 
     }
 
     companion object {
-        private const val PREPARED_ERROR_MESSAGE = "Product preparation already ended!"
         private const val CANCELLED_ERROR_MESSAGE = "Product preparation has been cancelled!"
         private const val WRONG_USER_ERROR_MESSAGE =
                 "Product receiver can be changed only by executing barista or receiving user!"
