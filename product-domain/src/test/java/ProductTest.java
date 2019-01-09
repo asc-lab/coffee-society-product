@@ -40,9 +40,9 @@ public class ProductTest {
     public void shouldCancelProductPreparation() {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"))
-                .when(new CancelProductPreparationCommand("123"))
+                .when(new CancelProductPreparationCommand("123", "product_def"))
                 .expectSuccessfulHandlerExecution()
-                .expectEvents(new ProductPreparationCancelledEvent("123"))
+                .expectEvents(new ProductPreparationCancelledEvent("123", "product_def", "receiver", "executor"))
                 .expectState(product -> assertSame(ProductState.CANCELLED, product.state));
     }
 
@@ -50,8 +50,8 @@ public class ProductTest {
     public void shouldThrowExceptionForCancelWhenPreparationAlreadyCanceled() {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"),
-                        new ProductPreparationCancelledEvent("123"))
-                .when(new CancelProductPreparationCommand("123"))
+                        new ProductPreparationCancelledEvent("123", "product_def", "receiver", "executor"))
+                .when(new CancelProductPreparationCommand("123", "executor"))
                 .expectNoEvents()
                 .expectException(IllegalStateException.class);
     }
@@ -89,7 +89,7 @@ public class ProductTest {
     public void shouldThrowExceptionWhenProductReceiverChangedOnCancelledProduct() {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"),
-                        new ProductPreparationCancelledEvent("123"))
+                        new ProductPreparationCancelledEvent("123", "product_def", "receiver", "executor"))
                 .when(new ChangeProductReceiverCommand("123", "new_receiver", "executor"))
                 .expectNoEvents()
                 .expectException(IllegalStateException.class);

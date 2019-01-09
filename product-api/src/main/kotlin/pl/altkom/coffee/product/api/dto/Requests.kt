@@ -15,4 +15,6 @@ data class ChangeProductReceiverRequest(
 )
 
 data class CancelProductPreparationRequest(
-        val id: String)
+        val id: String,
+        val productExecutorId: String
+)

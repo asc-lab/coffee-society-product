@@ -10,7 +10,9 @@ data class RegisterProductPreparationCommand(
 )
 
 data class CancelProductPreparationCommand(
-        @TargetAggregateIdentifier val id: String)
+        @TargetAggregateIdentifier val id: String,
+        val productExecutorId: String
+)
 
 data class ChangeProductReceiverCommand(
         @TargetAggregateIdentifier val id: String,

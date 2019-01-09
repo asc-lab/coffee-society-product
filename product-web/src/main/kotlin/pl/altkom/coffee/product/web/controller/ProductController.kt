@@ -34,7 +34,10 @@ class ProductController(private val commandGateway: CommandGateway) {
     @PostMapping("/cancel")
     fun cancelProductPreparation(@RequestBody request: CancelProductPreparationRequest): Mono<Void> {
         return Mono.fromFuture(commandGateway.send<Void>(
-                CancelProductPreparationCommand(request.id)))
+                CancelProductPreparationCommand(
+                        request.id,
+                        request.productExecutorId
+                )))
     }
 
     @PreAuthorize("hasAnyAuthority('MEMBER','BARISTA')")
