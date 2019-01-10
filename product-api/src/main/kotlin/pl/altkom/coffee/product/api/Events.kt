@@ -14,5 +14,6 @@ data class ProductPreparationCancelledEvent(
 
 data class ProductReceiverChangedEvent(
         val id: String,
-        val newProductReceiverId: String
+        val productDefId: String,
+        val productReceiverNewId: String
 )

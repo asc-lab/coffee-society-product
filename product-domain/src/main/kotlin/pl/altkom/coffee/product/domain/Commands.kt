@@ -16,6 +16,7 @@ data class CancelProductPreparationCommand(
 
 data class ChangeProductReceiverCommand(
         @TargetAggregateIdentifier val id: String,
-        val newProductReceiverId: String,
-        val executor: String
+        val productDefId: String,
+        val productReceiverNewId: String,
+        val executorId: String
 )

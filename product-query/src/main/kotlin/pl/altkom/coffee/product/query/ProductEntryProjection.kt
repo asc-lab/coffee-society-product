@@ -25,7 +25,7 @@ class ProductEntryProjection(private val repository: ProductEntryRepository, pri
     @EventHandler
     fun on(event: ProductReceiverChangedEvent) {
         repository.findById(event.id).ifPresent { productEntry ->
-            productEntry.memberName = event.newProductReceiverId
+            productEntry.memberName = event.productReceiverNewId
             repository.save(productEntry)
         }
     }

@@ -1,3 +1,5 @@
+package pl.altkom.coffee.product.domain;
+
 import org.axonframework.test.aggregate.AggregateTestFixture;
 import org.junit.Before;
 import org.junit.Test;
@@ -5,10 +7,6 @@ import pl.altkom.coffee.product.api.ProductPreparationCancelledEvent;
 import pl.altkom.coffee.product.api.ProductPreparationRegisteredEvent;
 import pl.altkom.coffee.product.api.ProductReceiverChangedEvent;
 import pl.altkom.coffee.product.api.enums.ProductState;
-import pl.altkom.coffee.product.domain.CancelProductPreparationCommand;
-import pl.altkom.coffee.product.domain.ChangeProductReceiverCommand;
-import pl.altkom.coffee.product.domain.Product;
-import pl.altkom.coffee.product.domain.RegisterProductPreparationCommand;
 
 import static org.junit.Assert.assertSame;
 
@@ -60,9 +58,9 @@ public class ProductTest {
     public void shouldChangeProductReceiverWithExecutor() {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"))
-                .when(new ChangeProductReceiverCommand("123", "new_receiver", "executor"))
+                .when(new ChangeProductReceiverCommand("123", "product_def", "new_receiver", "executor"))
                 .expectSuccessfulHandlerExecution()
-                .expectEvents(new ProductReceiverChangedEvent("123", "new_receiver"))
+                .expectEvents(new ProductReceiverChangedEvent("123", "product_def", "new_receiver"))
                 .expectState(product -> assertSame("new_receiver", product.receiverId));
     }
 
@@ -70,9 +68,9 @@ public class ProductTest {
     public void shouldChangeProductReceiverWithReceiver() {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"))
-                .when(new ChangeProductReceiverCommand("123", "new_receiver", "receiver"))
+                .when(new ChangeProductReceiverCommand("123", "product_def", "new_receiver", "receiver"))
                 .expectSuccessfulHandlerExecution()
-                .expectEvents(new ProductReceiverChangedEvent("123", "new_receiver"))
+                .expectEvents(new ProductReceiverChangedEvent("123", "product_def", "new_receiver"))
                 .expectState(product -> assertSame("new_receiver", product.receiverId));
     }
 
@@ -80,7 +78,7 @@ public class ProductTest {
     public void shouldThrowExceptionWhenProductReceiverChangedWithOtherUser() {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"))
-                .when(new ChangeProductReceiverCommand("123", "new_receiver", "other_user"))
+                .when(new ChangeProductReceiverCommand("123", "product_def", "new_receiver", "other_user"))
                 .expectNoEvents()
                 .expectException(IllegalStateException.class);
     }
@@ -90,7 +88,7 @@ public class ProductTest {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"),
                         new ProductPreparationCancelledEvent("123", "product_def"))
-                .when(new ChangeProductReceiverCommand("123", "new_receiver", "executor"))
+                .when(new ChangeProductReceiverCommand("123", "product_def", "new_receiver", "executor"))
                 .expectNoEvents()
                 .expectException(IllegalStateException.class);
     }

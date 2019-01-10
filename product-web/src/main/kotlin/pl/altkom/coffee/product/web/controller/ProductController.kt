@@ -46,8 +46,9 @@ class ProductController(private val commandGateway: CommandGateway) {
         return Mono.fromFuture(commandGateway.send<Void>(
                 ChangeProductReceiverCommand(
                         request.id,
+                        request.productDefId,
                         request.productReceiverNewId,
-                        request.executorId
+                        request.productExecutorId
                 )))
     }
 }

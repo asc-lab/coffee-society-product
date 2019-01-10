@@ -56,16 +56,16 @@ class Product {
         if (isCancelled()) {
             throw IllegalStateException(CANCELLED_ERROR_MESSAGE)
         }
-        if (!canChangeReceiver(command.executor)) {
+        if (!canChangeReceiver(command.executorId)) {
             throw IllegalStateException(WRONG_USER_ERROR_MESSAGE)
         }
 
-        AggregateLifecycle.apply(ProductReceiverChangedEvent(productId, command.newProductReceiverId))
+        AggregateLifecycle.apply(ProductReceiverChangedEvent(productId, command.productDefId, command.productReceiverNewId))
     }
 
     @EventSourcingHandler
     fun on(event: ProductReceiverChangedEvent) {
-        this.receiverId = event.newProductReceiverId
+        this.receiverId = event.productReceiverNewId
     }
 
     private fun isCancelled(): Boolean {
