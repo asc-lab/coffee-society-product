@@ -1,5 +1,5 @@
 server:
-  port: 9003
+  port: 9005
 
 spring:
   data:
@@ -24,7 +24,7 @@ security:
     resource:
       id: product-rest-api
       jwt:
-        key-value: secretKey
+        key-value: signingKey
 
 #axon:
 #  eventhandling:

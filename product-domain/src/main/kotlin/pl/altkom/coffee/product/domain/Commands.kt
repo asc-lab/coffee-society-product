@@ -2,21 +2,21 @@ package pl.altkom.coffee.product.domain
 
 import org.axonframework.modelling.command.TargetAggregateIdentifier
 
-data class BeginProductPreparationCommand(
+data class RegisterProductPreparationCommand(
         @TargetAggregateIdentifier val id: String,
         val productDefId: String,
-        val productReceiverName: String,
-        val executor: String
+        val productReceiverId: String,
+        val productExecutorId: String
 )
 
-data class EndProductPreparationCommand(
-        @TargetAggregateIdentifier val id: String)
-
 data class CancelProductPreparationCommand(
-        @TargetAggregateIdentifier val id: String)
+        @TargetAggregateIdentifier val id: String,
+        val productDefId: String
+)
 
 data class ChangeProductReceiverCommand(
         @TargetAggregateIdentifier val id: String,
-        val newProductReceiverName: String,
-        val executor: String
+        val productDefId: String,
+        val productReceiverNewId: String,
+        val executorId: String
 )

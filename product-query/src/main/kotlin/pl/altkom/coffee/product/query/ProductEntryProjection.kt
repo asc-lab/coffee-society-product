@@ -4,7 +4,7 @@ import org.axonframework.eventhandling.EventHandler
 import org.axonframework.messaging.responsetypes.InstanceResponseType
 import org.axonframework.queryhandling.QueryGateway
 import org.springframework.stereotype.Component
-import pl.altkom.coffee.product.api.ProductPreparationStartedEvent
+import pl.altkom.coffee.product.api.ProductPreparationRegisteredEvent
 import pl.altkom.coffee.product.api.ProductReceiverChangedEvent
 import pl.altkom.coffee.productcatalog.api.query.ProductNameQuery
 
@@ -15,17 +15,17 @@ class ProductEntryProjection(private val repository: ProductEntryRepository, pri
 
 
     @EventHandler
-    fun on(event: ProductPreparationStartedEvent) {
+    fun on(event: ProductPreparationRegisteredEvent) {
         val name = queryGateway.query(
                 ProductNameQuery(event.productDefId), InstanceResponseType(String::class.java)).get()
 
-        repository.save(ProductEntry(name, event.productReceiverName))
+        repository.save(ProductEntry(name, event.productReceiverId))
     }
 
     @EventHandler
     fun on(event: ProductReceiverChangedEvent) {
         repository.findById(event.id).ifPresent { productEntry ->
-            productEntry.memberName = event.newProductReceiverName
+            productEntry.memberName = event.productReceiverNewId
             repository.save(productEntry)
         }
     }
