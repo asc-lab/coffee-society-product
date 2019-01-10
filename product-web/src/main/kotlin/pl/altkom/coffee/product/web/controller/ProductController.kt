@@ -36,7 +36,7 @@ class ProductController(private val commandGateway: CommandGateway) {
         return Mono.fromFuture(commandGateway.send<Void>(
                 CancelProductPreparationCommand(
                         request.id,
-                        request.productExecutorId
+                        request.productDefId
                 )))
     }
 

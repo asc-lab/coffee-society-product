@@ -43,13 +43,11 @@ class Product {
             throw IllegalStateException(CANCELLED_ERROR_MESSAGE)
         }
 
-        AggregateLifecycle.apply(ProductPreparationCancelledEvent(command.id, productDefId,
-                receiverId, command.productExecutorId))
+        AggregateLifecycle.apply(ProductPreparationCancelledEvent(command.id, command.productDefId))
     }
 
     @EventSourcingHandler
     fun on(event: ProductPreparationCancelledEvent) {
-        this.executorId = event.productExecutorId
         this.state = ProductState.CANCELLED
     }
 
