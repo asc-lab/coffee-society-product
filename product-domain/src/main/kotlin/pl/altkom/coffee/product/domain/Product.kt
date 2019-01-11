@@ -23,9 +23,11 @@ class Product {
 
     @CommandHandler
     constructor(command: RegisterProductPreparationCommand) {
-        AggregateLifecycle.apply(
-                ProductPreparationRegisteredEvent(command.id, command.productDefId,
-                        command.productReceiverId, command.productExecutorId))
+        with(command) {
+            AggregateLifecycle.apply(
+                    ProductPreparationRegisteredEvent(id, selectedProductId, productDefId,
+                            productReceiverId, productExecutorId))
+        }
     }
 
     @EventSourcingHandler
@@ -43,7 +45,9 @@ class Product {
             throw IllegalStateException(CANCELLED_ERROR_MESSAGE)
         }
 
-        AggregateLifecycle.apply(ProductPreparationCancelledEvent(command.id, command.productDefId))
+        with(command) {
+            AggregateLifecycle.apply(ProductPreparationCancelledEvent(id, productDefId))
+        }
     }
 
     @EventSourcingHandler

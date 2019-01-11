@@ -24,6 +24,7 @@ class ProductController(private val commandGateway: CommandGateway) {
         return Mono.fromFuture(commandGateway.send<Void>(
                 RegisterProductPreparationCommand(
                         request.id,
+                        request.selectedProductId,
                         request.productDefId,
                         request.productReceiverId,
                         request.productExecutorId

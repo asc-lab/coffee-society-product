@@ -4,6 +4,7 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier
 
 data class RegisterProductPreparationCommand(
         @TargetAggregateIdentifier val id: String,
+        val selectedProductId: String,
         val productDefId: String,
         val productReceiverId: String,
         val productExecutorId: String
