@@ -38,7 +38,7 @@ public class ProductTest {
     public void shouldCancelProductPreparation() {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"))
-                .when(new CancelProductPreparationCommand("123", "product_def"))
+                .when(new CancelProductPreparationCommand("123"))
                 .expectSuccessfulHandlerExecution()
                 .expectEvents(new ProductPreparationCancelledEvent("123", "product_def"))
                 .expectState(product -> assertSame(ProductState.CANCELLED, product.state));
@@ -49,7 +49,7 @@ public class ProductTest {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"),
                         new ProductPreparationCancelledEvent("123", "product_def"))
-                .when(new CancelProductPreparationCommand("123", "executor"))
+                .when(new CancelProductPreparationCommand("123"))
                 .expectNoEvents()
                 .expectException(IllegalStateException.class);
     }
@@ -58,7 +58,7 @@ public class ProductTest {
     public void shouldChangeProductReceiverWithExecutor() {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"))
-                .when(new ChangeProductReceiverCommand("123", "product_def", "new_receiver", "executor"))
+                .when(new ChangeProductReceiverCommand("123", "new_receiver", "executor"))
                 .expectSuccessfulHandlerExecution()
                 .expectEvents(new ProductReceiverChangedEvent("123", "product_def", "new_receiver"))
                 .expectState(product -> assertSame("new_receiver", product.receiverId));
@@ -68,7 +68,7 @@ public class ProductTest {
     public void shouldChangeProductReceiverWithReceiver() {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"))
-                .when(new ChangeProductReceiverCommand("123", "product_def", "new_receiver", "receiver"))
+                .when(new ChangeProductReceiverCommand("123", "new_receiver", "receiver"))
                 .expectSuccessfulHandlerExecution()
                 .expectEvents(new ProductReceiverChangedEvent("123", "product_def", "new_receiver"))
                 .expectState(product -> assertSame("new_receiver", product.receiverId));
@@ -78,7 +78,7 @@ public class ProductTest {
     public void shouldThrowExceptionWhenProductReceiverChangedWithOtherUser() {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"))
-                .when(new ChangeProductReceiverCommand("123", "product_def", "new_receiver", "other_user"))
+                .when(new ChangeProductReceiverCommand("123", "new_receiver", "other_user"))
                 .expectNoEvents()
                 .expectException(IllegalStateException.class);
     }
@@ -88,7 +88,7 @@ public class ProductTest {
         fixture
                 .given(new ProductPreparationRegisteredEvent("123", "product_def", "receiver", "executor"),
                         new ProductPreparationCancelledEvent("123", "product_def"))
-                .when(new ChangeProductReceiverCommand("123", "product_def", "new_receiver", "executor"))
+                .when(new ChangeProductReceiverCommand("123", "new_receiver", "executor"))
                 .expectNoEvents()
                 .expectException(IllegalStateException.class);
     }

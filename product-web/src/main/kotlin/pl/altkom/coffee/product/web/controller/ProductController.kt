@@ -35,8 +35,7 @@ class ProductController(private val commandGateway: CommandGateway) {
     fun cancelProductPreparation(@RequestBody request: CancelProductPreparationRequest): Mono<Void> {
         return Mono.fromFuture(commandGateway.send<Void>(
                 CancelProductPreparationCommand(
-                        request.id,
-                        request.productDefId
+                        request.id
                 )))
     }
 
@@ -46,7 +45,6 @@ class ProductController(private val commandGateway: CommandGateway) {
         return Mono.fromFuture(commandGateway.send<Void>(
                 ChangeProductReceiverCommand(
                         request.id,
-                        request.productDefId,
                         request.productReceiverNewId,
                         request.productExecutorId
                 )))

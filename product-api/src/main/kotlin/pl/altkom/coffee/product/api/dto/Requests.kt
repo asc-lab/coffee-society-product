@@ -9,13 +9,11 @@ data class RegisterProductPreparationRequest(
 )
 
 data class CancelProductPreparationRequest(
-        val id: String,
-        val productDefId: String
+        val id: String
 )
 
 data class ChangeProductReceiverRequest(
         val id: String,
-        val productDefId: String,
         val productReceiverNewId: String,
         val productExecutorId: String
 )

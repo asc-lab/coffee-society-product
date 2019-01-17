@@ -43,7 +43,7 @@ class Product {
             throw IllegalStateException(CANCELLED_ERROR_MESSAGE)
         }
 
-        AggregateLifecycle.apply(ProductPreparationCancelledEvent(command.id, command.productDefId))
+        AggregateLifecycle.apply(ProductPreparationCancelledEvent(command.id, this.productDefId))
     }
 
     @EventSourcingHandler
@@ -60,7 +60,7 @@ class Product {
             throw IllegalStateException(WRONG_USER_ERROR_MESSAGE)
         }
 
-        AggregateLifecycle.apply(ProductReceiverChangedEvent(productId, command.productDefId, command.productReceiverNewId))
+        AggregateLifecycle.apply(ProductReceiverChangedEvent(productId, this.productDefId, command.productReceiverNewId))
     }
 
     @EventSourcingHandler
