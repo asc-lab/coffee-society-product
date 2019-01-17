@@ -5,6 +5,7 @@ import org.axonframework.queryhandling.QueryGateway
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import pl.altkom.coffee.product.query.ActiveProductsQuery
 import pl.altkom.coffee.product.query.AllProductsQuery
 import pl.altkom.coffee.product.query.ProductEntry
 import reactor.core.publisher.Mono
@@ -14,6 +15,10 @@ import reactor.core.publisher.Mono
 class ProductSearchController(private val queryGateway: QueryGateway) {
 
     @GetMapping("/products")
+    fun findActive(): Mono<List<ProductEntry>> =
+            Mono.fromFuture(queryGateway.query(ActiveProductsQuery(), MultipleInstancesResponseType(ProductEntry::class.java)))
+
+    @GetMapping("/all-products")
     fun findAll(): Mono<List<ProductEntry>> =
             Mono.fromFuture(queryGateway.query(AllProductsQuery(), MultipleInstancesResponseType(ProductEntry::class.java)))
 }

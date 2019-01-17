@@ -10,4 +10,9 @@ class ProductQueryHandler(private val repository: ProductEntryRepository) {
     fun getAllProducts(query: AllProductsQuery): List<ProductEntry> {
         return repository.findAll().toList()
     }
+
+    @QueryHandler
+    fun getActiveProducts(query: ActiveProductsQuery): List<ProductEntry> {
+        return repository.findByActive(true)
+    }
 }
