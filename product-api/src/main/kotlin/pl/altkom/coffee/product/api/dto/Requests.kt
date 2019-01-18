@@ -1,5 +1,7 @@
 package pl.altkom.coffee.product.api.dto
 
+import com.fasterxml.jackson.annotation.JsonCreator
+
 data class RegisterProductPreparationRequest(
         val id: String,
         val productDefId: String,
@@ -8,8 +10,9 @@ data class RegisterProductPreparationRequest(
         val productExecutorId: String
 )
 
-data class CancelProductPreparationRequest(
+data class CancelProductPreparationRequest @JsonCreator constructor(
         val id: String
+
 )
 
 data class ChangeProductReceiverRequest(
