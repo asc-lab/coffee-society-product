@@ -1,7 +1,9 @@
 package pl.altkom.coffee.product.query
 
 import mu.KLogging
+import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.EventHandler
+import org.axonframework.eventhandling.ResetHandler
 import org.axonframework.messaging.responsetypes.InstanceResponseType
 import org.axonframework.queryhandling.QueryGateway
 import org.springframework.stereotype.Component
@@ -12,6 +14,7 @@ import pl.altkom.coffee.productcatalog.api.query.ProductNameQuery
 
 
 @Component
+@ProcessingGroup("ProductEntryProjection")
 class ProductEntryProjection(private val repository: ProductEntryRepository, private val queryGateway: QueryGateway) {
 
 
@@ -38,6 +41,11 @@ class ProductEntryProjection(private val repository: ProductEntryRepository, pri
             productEntry.active = false
             repository.save(productEntry)
         }
+    }
+
+    @ResetHandler
+    fun onReset() {
+        repository.deleteAll()
     }
 
     companion object : KLogging()
