@@ -2,4 +2,7 @@ package pl.altkom.coffee.product.query
 
 class AllProductsQuery
 
-class ActiveProductsQuery
+data class ActiveProductsQuery(
+        val pageSize: Int,
+        val pageNumber: Int
+)

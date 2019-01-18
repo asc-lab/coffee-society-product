@@ -1,5 +1,6 @@
 package pl.altkom.coffee.product.query
 
+import mu.KLogging
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.messaging.responsetypes.InstanceResponseType
 import org.axonframework.queryhandling.QueryGateway
@@ -11,7 +12,6 @@ import pl.altkom.coffee.productcatalog.api.query.ProductNameQuery
 
 
 @Component
-//@ProcessingGroup("queryModel")
 class ProductEntryProjection(private val repository: ProductEntryRepository, private val queryGateway: QueryGateway) {
 
 
@@ -20,22 +20,25 @@ class ProductEntryProjection(private val repository: ProductEntryRepository, pri
         val name = queryGateway.query(
                 ProductNameQuery(event.productDefId), InstanceResponseType(String::class.java)).get()
 
-        repository.save(ProductEntry(name, event.productReceiverId))
+        repository.save(ProductEntry(event.id, name, event.productReceiverId))
     }
 
     @EventHandler
     fun on(event: ProductReceiverChangedEvent) {
         repository.findById(event.id).ifPresent { productEntry ->
-            productEntry.memberName = event.productReceiverNewId
+            productEntry.productReceiverId = event.productReceiverNewId
             repository.save(productEntry)
         }
     }
 
     @EventHandler
     fun on(event: ProductPreparationCancelledEvent) {
+        logger.info("updating projectEntry after cancelation")
         repository.findById(event.id).ifPresent { productEntry ->
             productEntry.active = false
             repository.save(productEntry)
         }
     }
+
+    companion object : KLogging()
 }

@@ -8,5 +8,5 @@ import org.springframework.data.elasticsearch.annotations.Document
 data class ProductEntry(
         @Id val productId: String? = null,
         var productName: String? = null,
-        var memberName: String? = null,
+        var productReceiverId: String? = null,
         var active: Boolean = true)
