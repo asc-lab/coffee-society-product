@@ -12,7 +12,7 @@ import pl.altkom.coffee.product.query.ProductEntry
 import reactor.core.publisher.Mono
 
 @RestController
-@RequestMapping("/api/search")
+@RequestMapping("/api/product")
 class ProductSearchController(private val queryGateway: QueryGateway) {
 
     @GetMapping("/products")
